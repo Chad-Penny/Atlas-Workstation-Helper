@@ -18,6 +18,12 @@ export const NAV = [
 export function AppSidebar() {
   const path = useRouterState({ select: (r) => r.location.pathname });
   const active = (u: string) => (u === "/" ? path === "/" : path.startsWith(u));
+  const { setOpenMobile, isMobile } = useSidebar();
+  // Close the mobile sheet as soon as a nav item opens its page,
+  // so the feature is visible and usable right away.
+  useEffect(() => {
+    if (isMobile) setOpenMobile(false);
+  }, [path, isMobile, setOpenMobile]);
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
