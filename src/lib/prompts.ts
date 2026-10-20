@@ -1,6 +1,6 @@
 // Structured prompt templates. Shared so the UI can preview the prompt it sends.
 export type ToolId = "email" | "meeting" | "tasks" | "research";
-type Fields = Record<string, string>;
+type Fields = Partial<Record<"recipient"|"purpose"|"tone"|"length"|"points"|"title"|"focus"|"notes"|"goal"|"timeframe"|"hours"|"tasks"|"topic"|"audience"|"depth"|"questions", string>>;
 
 const BASE =
   "You are a professional workplace productivity assistant. Write clear, accurate, well-structured Markdown. Never invent facts, names, numbers or dates that were not provided; flag assumptions explicitly.";

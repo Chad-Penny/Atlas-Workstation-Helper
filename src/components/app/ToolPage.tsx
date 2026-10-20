@@ -21,7 +21,7 @@ export function ToolPage({
 }: {
   tool: ToolId; title: string; description: string; icon: ReactNode; fields: Field[]; required: string;
 }) {
-  const init = Object.fromEntries(fields.map((f) => [f.name, f.type === "select" ? f.options[0] : ""]));
+  const init = Object.fromEntries(fields.map((f) => [f.name, f.type === "select" ? (f.options[0] ?? "") : ""]));
   const [values, setValues] = useState<Record<string, string>>(init);
   const [output, setOutput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -30,7 +30,7 @@ export function ToolPage({
   const abort = useRef<AbortController | null>(null);
 
   async function run() {
-    if (!values[required]?.trim()) return toast.error("Please fill in the required field first.");
+    if (!values[required]?.trim()) { toast.error("Please fill in the required field first."); return; }
     const ctrl = new AbortController();
     abort.current = ctrl;
     setBusy(true); setOutput(""); setMode("preview");
@@ -80,7 +80,7 @@ export function ToolPage({
                   onChange={(e) => setValues({ ...values, [f.name]: e.target.value })} />
               )}
               {f.type === "select" && (
-                <Select value={values[f.name]} onValueChange={(v) => setValues({ ...values, [f.name]: v })}>
+                <Select value={values[f.name] ?? ""} onValueChange={(v) => setValues({ ...values, [f.name]: v })}>
                   <SelectTrigger id={f.name}><SelectValue /></SelectTrigger>
                   <SelectContent>{f.options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                 </Select>
@@ -97,7 +97,7 @@ export function ToolPage({
           </div>
           {showPrompt && (
             <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-lg bg-muted p-3 text-xs text-muted-foreground">
-              {TOOL_PROMPTS[tool].build(values)}
+              {TOOL_PROMPTS[tool].build(values as never)}
             </pre>
           )}
         </section>
