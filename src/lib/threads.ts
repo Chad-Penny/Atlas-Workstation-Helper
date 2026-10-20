@@ -8,7 +8,12 @@ export function loadThreads(): Thread[] {
   try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { return []; }
 }
 export function saveThreads(t: Thread[]) {
-  localStorage.setItem(KEY, JSON.stringify(t));
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(KEY, JSON.stringify(t));
+  } catch {
+    // Storage full or blocked: keep the in-memory thread list for this session.
+  }
   window.dispatchEvent(new Event("atlas-threads"));
 }
 export function createThread(): Thread {
