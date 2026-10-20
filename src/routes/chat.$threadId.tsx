@@ -26,6 +26,7 @@ export const Route = createFileRoute("/chat/$threadId")({
 });
 
 let cache: { raw: string; val: Thread[] } = { raw: "", val: [] };
+const EMPTY: Thread[] = [];
 function subscribe(cb: () => void) {
   window.addEventListener("atlas-threads", cb);
   window.addEventListener("storage", cb);
@@ -35,6 +36,10 @@ function snapshot() {
   const raw = localStorage.getItem("atlas-chat-threads") || "[]";
   if (raw !== cache.raw) cache = { raw, val: loadThreads() };
   return cache.val;
+}
+// Stable server snapshot: a fresh [] each call would loop useSyncExternalStore.
+function serverSnapshot() {
+  return EMPTY;
 }
 
 function ChatPage() {
