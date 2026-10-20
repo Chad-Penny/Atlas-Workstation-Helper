@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- AI calls run only in server routes (`src/routes/api/*`) via `src/lib/ai.server.ts`; prompt templates live in `src/lib/prompts.ts` so the UI can preview them. Why: keeps the AI key server-side and prompts structured in one place.
+- Chat threads are stored in browser localStorage (`src/lib/threads.ts`), one URL per thread at `/chat/$threadId`. Why: user chose threaded, browser-saved history.
