@@ -5,7 +5,7 @@ import { ToolPage } from "@/components/app/ToolPage";
 const t = "AI Task Planner — Atlas Workplace AI";
 const d = "Prioritize your to-dos and get a realistic, time-blocked schedule.";
 export const Route = createFileRoute("/tasks")({
-  head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }] }),
+  head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: () => (
     <ToolPage tool="tasks" title="AI Task Planner" description={d} icon={<ListChecks />} required="tasks"
       fields={[

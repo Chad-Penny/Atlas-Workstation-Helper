@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ArrowUp, Compass, Plus, Square, Trash2 } from "lucide-react";
@@ -9,7 +9,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Disclaimer } from "@/components/app/Disclaimer";
-import { createThread, deleteThread, ensureThread, loadThreads, updateThreadMessages, type Thread } from "@/lib/threads";
+import { ChatError } from "@/components/app/ChatError";
+import { createThread, deleteThread, ensureThread, loadThreads, updateThreadMessages, useThreads } from "@/lib/threads";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/chat/$threadId")({
@@ -19,33 +20,19 @@ export const Route = createFileRoute("/chat/$threadId")({
       { name: "description", content: "Chat with Atlas, your AI workplace assistant." },
       { property: "og:title", content: "AI Chat — Atlas Workplace AI" },
       { property: "og:description", content: "Chat with Atlas, your AI workplace assistant." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   ssr: false,
   component: ChatPage,
+  errorComponent: ChatError,
 });
-
-let cache: { raw: string; val: Thread[] } = { raw: "", val: [] };
-const EMPTY: Thread[] = [];
-function subscribe(cb: () => void) {
-  window.addEventListener("atlas-threads", cb);
-  window.addEventListener("storage", cb);
-  return () => { window.removeEventListener("atlas-threads", cb); window.removeEventListener("storage", cb); };
-}
-function snapshot() {
-  const raw = localStorage.getItem("atlas-chat-threads") || "[]";
-  if (raw !== cache.raw) cache = { raw, val: loadThreads() };
-  return cache.val;
-}
-// Stable server snapshot: a fresh [] each call would loop useSyncExternalStore.
-function serverSnapshot() {
-  return EMPTY;
-}
 
 function ChatPage() {
   const { threadId } = Route.useParams();
   const navigate = useNavigate();
-  const threads = useSyncExternalStore(subscribe, snapshot, () => []);
+  const threads = useThreads();
   useEffect(() => ensureThread(threadId), [threadId]);
   const sorted = [...threads].sort((a, b) => b.updatedAt - a.updatedAt);
 
@@ -61,7 +48,7 @@ function ChatPage() {
           {sorted.map((t) => (
             <div key={t.id} className={cn("group flex items-center rounded-lg", t.id === threadId ? "bg-accent text-accent-foreground" : "hover:bg-muted")}>
               <Link to="/chat/$threadId" params={{ threadId: t.id }} className="flex-1 truncate px-3 py-2 text-sm">{t.title}</Link>
-              <button aria-label="Delete conversation" className="mr-1 rounded p-1.5 text-muted-foreground opacity-0 hover:text-destructive group-hover:opacity-100"
+               <Button size="icon" variant="ghost" aria-label="Delete conversation" title="Delete conversation" className="mr-1 size-7 text-muted-foreground opacity-0 hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
                 onClick={() => {
                   deleteThread(t.id);
                   if (t.id === threadId) {
@@ -70,7 +57,7 @@ function ChatPage() {
                   }
                 }}>
                 <Trash2 className="size-3.5" />
-              </button>
+               </Button>
             </div>
           ))}
         </div>
@@ -87,16 +74,20 @@ function ChatWindow({ threadId, onNew }: { threadId: string; onNew: () => void }
   const [input, setInput] = useState("");
   const ta = useRef<HTMLTextAreaElement>(null);
   const bottom = useRef<HTMLDivElement>(null);
+  const transport = useMemo(() => new DefaultChatTransport({ api: "/api/chat", body: { threadId } }), [threadId]);
   const { messages, sendMessage, status, stop } = useChat({
     id: threadId,
     messages: initial,
-    transport: new DefaultChatTransport({ api: "/api/chat", body: { threadId } }),
+    transport,
     onError: (e) => toast.error(e.message || "Chat failed"),
   });
   const busy = status === "submitted" || status === "streaming";
 
   useEffect(() => { if (status === "ready" && messages.length) updateThreadMessages(threadId, messages); }, [status, messages, threadId]);
-  useEffect(() => { bottom.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => bottom.current?.scrollIntoView({ behavior: "instant", block: "end" }));
+    return () => cancelAnimationFrame(frame);
+  }, [messages]);
   useEffect(() => { if (!busy) ta.current?.focus(); }, [busy]);
 
   function send(text: string) {
@@ -118,7 +109,7 @@ function ChatWindow({ threadId, onNew }: { threadId: string; onNew: () => void }
               <h2 className="text-xl font-semibold">How can Atlas help today?</h2>
               <div className="mt-6 flex flex-wrap justify-center gap-2">
                 {STARTERS.map((s) => (
-                  <button key={s} onClick={() => send(s)} className="rounded-full border bg-card px-3 py-1.5 text-sm hover:bg-accent">{s}</button>
+                  <Button key={s} variant="outline" onClick={() => send(s)} className="h-auto max-w-full whitespace-normal py-2">{s}</Button>
                 ))}
               </div>
             </div>
@@ -129,7 +120,7 @@ function ChatWindow({ threadId, onNew }: { threadId: string; onNew: () => void }
               <div className={cn(m.role === "user" ? "max-w-[80%] rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground" : "min-w-0 flex-1")}>
                 {m.parts.map((p, i) => {
                   if (p.type === "text") return m.role === "user"
-                    ? <p key={i} className="whitespace-pre-wrap">{p.text}</p>
+                    ? <p key={i} className="whitespace-pre-wrap break-words">{p.text}</p>
                     : <div key={i} className="prose-ai"><ReactMarkdown remarkPlugins={[remarkGfm]}>{p.text}</ReactMarkdown></div>;
                   if (p.type === "reasoning" && p.text) return (
                     <details key={i} className="mb-2 text-xs text-muted-foreground"><summary className="cursor-pointer">Thinking</summary><p className="mt-1 whitespace-pre-wrap">{p.text}</p></details>

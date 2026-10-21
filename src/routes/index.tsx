@@ -6,7 +6,7 @@ import { Disclaimer } from "@/components/app/Disclaimer";
 const t = "Atlas — AI Workplace Productivity Assistant";
 const d = "Automate emails, meeting notes, planning and research with AI.";
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }] }),
+  head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: Index,
 });
 

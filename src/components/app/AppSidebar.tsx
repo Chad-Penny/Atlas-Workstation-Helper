@@ -45,7 +45,7 @@ export function AppSidebar() {
               {NAV.map((i) => (
                 <SidebarMenuItem key={i.url}>
                   <SidebarMenuButton asChild isActive={active(i.url)} tooltip={i.title}>
-                    <Link to={i.url}>
+                    <Link to={i.url} onClick={() => { if (isMobile) setOpenMobile(false); }}>
                       <i.icon />
                       <span>{i.title}</span>
                     </Link>

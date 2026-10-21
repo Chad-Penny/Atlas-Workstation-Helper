@@ -1,17 +1,21 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { createThread, loadThreads } from "@/lib/threads";
+import { ChatError } from "@/components/app/ChatError";
 
 export const Route = createFileRoute("/chat/")({
   head: () => ({
     meta: [
-      { title: "AI Chat — Atlas Workplace AI" },
-      { name: "description", content: "Chat with Atlas, your AI workplace assistant." },
-      { property: "og:title", content: "AI Chat — Atlas Workplace AI" },
-      { property: "og:description", content: "Chat with Atlas, your AI workplace assistant." },
+      { title: "Open Conversations — Atlas Workplace AI" },
+      { name: "description", content: "Open your latest Atlas workplace conversation or start a new chat." },
+      { property: "og:title", content: "Open Conversations — Atlas Workplace AI" },
+      { property: "og:description", content: "Open your latest Atlas workplace conversation or start a new chat." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ChatIndex,
+  errorComponent: ChatError,
 });
 
 function ChatIndex() {

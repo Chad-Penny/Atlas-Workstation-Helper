@@ -5,7 +5,7 @@ import { ToolPage } from "@/components/app/ToolPage";
 const t = "Smart Email Generator — Atlas Workplace AI";
 const d = "Draft polished professional emails in seconds with the right tone.";
 export const Route = createFileRoute("/email")({
-  head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }] }),
+  head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: () => (
     <ToolPage tool="email" title="Smart Email Generator" description={d} icon={<Mail />} required="purpose"
       fields={[

@@ -1,0 +1,3 @@
+- [x] Stabilize chat navigation, browser-saved history, and recovery.
+- [x] Check all feature pages on desktop, tablet, and mobile; fix layout failures.
+- [x] Run regression tests and verify chat end-to-end.
