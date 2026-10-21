@@ -5,7 +5,7 @@ import { ToolPage } from "@/components/app/ToolPage";
 const t = "AI Research Assistant — Atlas Workplace AI";
 const d = "Get structured research briefings with findings, trade-offs and next steps.";
 export const Route = createFileRoute("/research")({
-  head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }] }),
+  head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: () => (
     <ToolPage tool="research" title="AI Research Assistant" description={d} icon={<Search />} required="topic"
       fields={[
