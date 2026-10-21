@@ -2,7 +2,7 @@
 @source "../src";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -86,7 +86,46 @@
   --sidebar-border: oklch(0.3 0.03 210);
   --sidebar-ring: oklch(0.78 0.14 65);
   --gradient-hero: linear-gradient(135deg, oklch(0.32 0.07 200), oklch(0.47 0.09 190) 60%, oklch(0.6 0.1 175));
-  --shadow-soft: 0 1px 2px oklch(0.2 0.03 220 / 6%), 0 8px 24px -12px oklch(0.2 0.03 220 / 18%);
+  --shadow-soft: 0 2px 4px oklch(0.2 0.03 220 / 6%), 0 12px 30px -12px oklch(0.2 0.03 220 / 22%);
+  --shadow-raised: 0 4px 10px oklch(0.2 0.03 220 / 8%), 0 18px 36px -14px oklch(0.2 0.03 220 / 30%);
+  --shadow-header: 0 3px 12px oklch(0.2 0.03 220 / 7%);
+  --shadow-sidebar: 5px 0 24px -10px oklch(0.2 0.03 220 / 22%);
+}
+
+.dark {
+  --background: oklch(0.17 0.006 190);
+  --foreground: oklch(0.94 0.008 190);
+  --card: oklch(0.215 0.008 190);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.24 0.008 190);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.76 0.1 180);
+  --primary-foreground: oklch(0.18 0.02 190);
+  --secondary: oklch(0.28 0.015 190);
+  --secondary-foreground: oklch(0.91 0.02 180);
+  --muted: oklch(0.255 0.007 190);
+  --muted-foreground: oklch(0.73 0.013 190);
+  --accent: oklch(0.3 0.032 185);
+  --accent-foreground: oklch(0.9 0.05 180);
+  --highlight: oklch(0.8 0.13 65);
+  --highlight-foreground: oklch(0.21 0.03 50);
+  --destructive: oklch(0.72 0.18 25);
+  --destructive-foreground: oklch(0.17 0.01 25);
+  --border: oklch(0.33 0.008 190);
+  --input: oklch(0.37 0.01 190);
+  --ring: var(--primary);
+  --sidebar: oklch(0.14 0.006 190);
+  --sidebar-foreground: oklch(0.87 0.015 190);
+  --sidebar-primary: var(--highlight);
+  --sidebar-primary-foreground: var(--highlight-foreground);
+  --sidebar-accent: oklch(0.26 0.02 190);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+  --shadow-soft: 0 2px 4px oklch(0 0 0 / 18%), 0 12px 30px -12px oklch(0 0 0 / 40%);
+  --shadow-raised: 0 4px 10px oklch(0 0 0 / 22%), 0 18px 36px -14px oklch(0 0 0 / 50%);
+  --shadow-header: 0 3px 12px oklch(0 0 0 / 24%);
+  --shadow-sidebar: 5px 0 24px -10px oklch(0 0 0 / 40%);
 }
 
 @layer base {
@@ -109,6 +148,15 @@
 }
 @utility shadow-soft {
   box-shadow: var(--shadow-soft);
+}
+@utility shadow-raised {
+  box-shadow: var(--shadow-raised);
+}
+@utility shadow-header {
+  box-shadow: var(--shadow-header);
+}
+@utility shadow-sidebar {
+  box-shadow: var(--shadow-sidebar);
 }
 
 .prose-ai { min-width: 0; overflow-wrap: anywhere; line-height: 1.65; font-size: 0.925rem; }

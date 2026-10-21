@@ -12,3 +12,5 @@
 - AI calls run only in server routes (`src/routes/api/*`) via `src/lib/ai.server.ts`; prompt templates live in `src/lib/prompts.ts` so the UI can preview them. Why: keeps the AI key server-side and prompts structured in one place.
 - Chat threads are stored in browser localStorage (`src/lib/threads.ts`), one URL per thread at `/chat/$threadId`. Why: user chose threaded, browser-saved history.
 - Chat uses a shared validated external store with stable snapshots and a memoized per-thread transport; storage failures retain session state. Why: malformed or unavailable browser storage must not crash navigation or repeatedly render chat.
+- Appearance is managed by one shared provider, applied after hydration and saved best-effort in browser storage; all views use global semantic light/dark tokens. Why: switching stays consistent without hydration mismatches or failures when storage is blocked.
+- Mobile sidebar swipe handling lives in a shared document listener with edge-only opening and horizontal gesture detection. Why: it reaches portaled menus without intercepting form editing or vertical scrolling.

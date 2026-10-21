@@ -15,6 +15,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app/AppSidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { AppearanceProvider, ThemeToggle, useAppearance } from "@/components/app/AppearanceProvider";
+import { SidebarSwipe } from "@/components/app/SidebarSwipe";
 
 function NotFoundComponent() {
   return (
@@ -81,8 +83,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Atlas — AI Workplace Productivity Assistant" },
-      { name: "description", content: "Automate emails, meeting notes, planning and research with AI." },
+      { title: "Atlas — Your Helpful AI Companion" },
+      { name: "description", content: "Meet Atlas, your helpful AI companion for emails, meeting notes, planning and research." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -119,13 +121,16 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <AppearanceProvider>
       <SidebarProvider>
+        <SidebarSwipe />
         <div className="flex min-h-screen w-full">
           <AppSidebar />
           <div className="flex min-w-0 flex-1 flex-col">
-            <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur">
+            <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/95 px-4 shadow-header backdrop-blur">
               <SidebarTrigger />
-              <span className="text-sm font-medium text-muted-foreground">AI Workplace Productivity Assistant</span>
+              <Link to="/" className="min-w-0 flex-1 font-display text-sm font-semibold">Atlas <span className="hidden font-sans font-normal text-muted-foreground sm:inline">· Here to help</span></Link>
+              <ThemeToggle />
             </header>
             <main className="flex-1">
               <Outlet />
@@ -133,7 +138,13 @@ function RootComponent() {
           </div>
         </div>
       </SidebarProvider>
-      <Toaster richColors />
+      <ThemedToaster />
+      </AppearanceProvider>
     </QueryClientProvider>
   );
+}
+
+function ThemedToaster() {
+  const { theme } = useAppearance();
+  return <Toaster richColors theme={theme} />;
 }
