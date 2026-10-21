@@ -67,7 +67,7 @@ export function ToolPage({
         </div>
       </header>
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="space-y-4 rounded-2xl border bg-card p-5 shadow-soft">
+        <section className="min-w-0 space-y-4 rounded-2xl border bg-card p-5 shadow-soft">
           {fields.map((f) => (
             <div key={f.name} className="space-y-1.5">
               <Label htmlFor={f.name}>{f.label}{f.name === required && <span className="text-destructive"> *</span>}</Label>
@@ -102,13 +102,13 @@ export function ToolPage({
           )}
         </section>
 
-        <section className="flex min-h-[420px] flex-col rounded-2xl border bg-card shadow-soft">
-          <div className="flex items-center justify-between border-b px-4 py-2.5">
+        <section className="flex min-h-[420px] min-w-0 flex-col rounded-2xl border bg-card shadow-soft">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-2.5">
             <p className="text-sm font-medium">Output {busy && <span className="ml-1 animate-pulse text-primary">· generating…</span>}</p>
             <div className="flex gap-1">
               <Button size="sm" variant={mode === "preview" ? "secondary" : "ghost"} onClick={() => setMode("preview")} disabled={!output}><Eye /> Preview</Button>
               <Button size="sm" variant={mode === "edit" ? "secondary" : "ghost"} onClick={() => setMode("edit")} disabled={!output || busy}><Pencil /> Edit</Button>
-              <Button size="sm" variant="ghost" disabled={!output} onClick={() => { navigator.clipboard.writeText(output); toast.success("Copied"); }}><Copy /></Button>
+              <Button size="sm" variant="ghost" disabled={!output} aria-label="Copy output" title="Copy output" onClick={async () => { try { await navigator.clipboard.writeText(output); toast.success("Copied"); } catch { toast.error("Copy unavailable. Select and copy the output manually."); } }}><Copy /></Button>
               <Button size="sm" variant="ghost" disabled={!output || busy} onClick={run} aria-label="Regenerate"><RotateCcw /></Button>
             </div>
           </div>
