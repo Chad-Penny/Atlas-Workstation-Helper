@@ -25,7 +25,7 @@ export function AppSidebar() {
     if (isMobile) setOpenMobile(false);
   }, [path, isMobile, setOpenMobile]);
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="shadow-sidebar">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-1 py-2">
           <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
@@ -33,7 +33,7 @@ export function AppSidebar() {
           </div>
           <div className="leading-tight group-data-[collapsible=icon]:hidden">
             <p className="font-display text-sm font-semibold text-sidebar-accent-foreground">Atlas</p>
-            <p className="text-[11px] text-sidebar-foreground/70">Workplace AI</p>
+            <p className="text-[11px] text-sidebar-foreground/70">Here to help you</p>
           </div>
         </div>
       </SidebarHeader>

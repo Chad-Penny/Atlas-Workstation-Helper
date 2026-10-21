@@ -106,7 +106,8 @@ function ChatWindow({ threadId, onNew }: { threadId: string; onNew: () => void }
           {messages.length === 0 && (
             <div className="py-12 text-center">
               <div className="mx-auto mb-4 grid size-12 place-items-center rounded-2xl bg-hero text-primary-foreground"><Compass /></div>
-              <h2 className="text-xl font-semibold">How can Atlas help today?</h2>
+              <h2 className="text-xl font-semibold">Hi, I’m Atlas. How can I help?</h2>
+              <p className="mt-2 text-sm text-muted-foreground">Good to have you here. Let’s take something off your plate.</p>
               <div className="mt-6 flex flex-wrap justify-center gap-2">
                 {STARTERS.map((s) => (
                   <Button key={s} variant="outline" onClick={() => send(s)} className="h-auto max-w-full whitespace-normal py-2">{s}</Button>
