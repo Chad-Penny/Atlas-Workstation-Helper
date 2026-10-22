@@ -1,6 +1,7 @@
 - [x] Stabilize chat navigation, browser-saved history, and recovery.
 - [x] Check all feature pages on desktop, tablet, and mobile; fix layout failures.
 - [x] Run regression tests and verify chat end-to-end.
-- [ ] Reinforce Atlas branding and welcoming greeting with subtle page shadows.
-- [ ] Add light/dark switching across every view.
-- [ ] Add phone sidebar swipe gestures and verify across screen sizes.
+- [x] Add welcoming branding, shadows, light/dark switching and phone swipes (user confirmed swipes work).
+- [ ] Redesign dashboard and navigation as Atlas Workspace in Solar Amber & Titanium.
+- [ ] Add optional five-star survey and compact, accurately tracked usage statistics.
+- [ ] Verify feedback, tracked activity, navigation and appearance across screen sizes; skip swipe testing.
