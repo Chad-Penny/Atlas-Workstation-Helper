@@ -17,6 +17,7 @@ import { AppSidebar } from "@/components/app/AppSidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { AppearanceProvider, ThemeToggle, useAppearance } from "@/components/app/AppearanceProvider";
 import { SidebarSwipe } from "@/components/app/SidebarSwipe";
+import { WorkspaceStatsProvider } from '@/components/app/WorkspaceStatsProvider';
 
 function NotFoundComponent() {
   return (
@@ -83,8 +84,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Atlas — Your Helpful AI Companion" },
-      { name: "description", content: "Meet Atlas, your helpful AI companion for emails, meeting notes, planning and research." },
+      { title: "Atlas Workspace — Your AI-powered work assistant" },
+      { name: "description", content: "Your work, mapped out. Your day, simplified. Draft emails, summarize meetings and plan your day with Atlas." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -122,14 +123,15 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AppearanceProvider>
-      <SidebarProvider>
+       <WorkspaceStatsProvider>
+       <SidebarProvider>
         <SidebarSwipe />
         <div className="flex min-h-screen w-full">
           <AppSidebar />
           <div className="flex min-w-0 flex-1 flex-col">
-            <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/95 px-4 shadow-header backdrop-blur">
+            <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur md:px-7">
               <SidebarTrigger />
-              <Link to="/" className="min-w-0 flex-1 font-display text-sm font-semibold">Atlas <span className="hidden font-sans font-normal text-muted-foreground sm:inline">· Here to help</span></Link>
+              <Link to="/" className="min-w-0 flex-1 truncate font-display text-sm font-semibold">Atlas Workspace <span className="hidden font-sans text-xs font-normal text-muted-foreground lg:inline"> / Your AI-powered work assistant</span></Link>
               <ThemeToggle />
             </header>
             <main className="flex-1">
@@ -138,6 +140,7 @@ function RootComponent() {
           </div>
         </div>
       </SidebarProvider>
+       </WorkspaceStatsProvider>
       <ThemedToaster />
       </AppearanceProvider>
     </QueryClientProvider>
