@@ -27,8 +27,8 @@ export function WorkspaceStatsProvider({ children }: { children: ReactNode }) {
     setLoading(false);
     if (failure) { setError('Statistics are temporarily unavailable.'); return; }
     if (data && typeof data === 'object' && !Array.isArray(data)) {
-      setCounts(parseCounts(data.counts));
-      const parsed = feedbackSchema.safeParse(data.feedback);
+      setCounts(parseCounts(data['counts']));
+      const parsed = feedbackSchema.safeParse(data['feedback']);
       setFeedback(parsed.success ? parsed.data : null);
     }
     setError(null);
