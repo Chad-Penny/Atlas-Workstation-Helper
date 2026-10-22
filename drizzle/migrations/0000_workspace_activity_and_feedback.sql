@@ -1,0 +1,15 @@
+CREATE TABLE public.workspace_activity (owner_hash text NOT NULL, event_id uuid NOT NULL, kind text NOT NULL CHECK (kind IN ('prompt','email','meeting','tasks','research','conversation')), created_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(owner_hash,event_id));
+GRANT ALL ON public.workspace_activity TO service_role;
+ALTER TABLE public.workspace_activity ENABLE ROW LEVEL SECURITY;
+CREATE TABLE public.workspace_feedback (owner_hash text PRIMARY KEY, rating integer NOT NULL CHECK (rating BETWEEN 1 AND 5), minutes_saved integer NOT NULL CHECK (minutes_saved BETWEEN 0 AND 1000000), note text NOT NULL DEFAULT '' CHECK (length(note)<=1000), updated_at timestamptz NOT NULL DEFAULT now());
+GRANT ALL ON public.workspace_feedback TO service_role;
+ALTER TABLE public.workspace_feedback ENABLE ROW LEVEL SECURITY;
+CREATE FUNCTION public.workspace_snapshot(p_token text) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE h text; result jsonb; BEGIN IF p_token !~ '^[a-f0-9]{64}$' THEN RAISE EXCEPTION 'Invalid workspace token'; END IF; h:=encode(sha256(convert_to(p_token,'UTF8')),'hex'); SELECT jsonb_build_object('counts',coalesce((SELECT jsonb_object_agg(kind,n) FROM (SELECT kind,count(*) n FROM public.workspace_activity WHERE owner_hash=h GROUP BY kind) c),'{}'::jsonb),'feedback',(SELECT jsonb_build_object('rating',rating,'minutesSaved',minutes_saved,'note',note) FROM public.workspace_feedback WHERE owner_hash=h)) INTO result; RETURN result; END $$;
+REVOKE ALL ON FUNCTION public.workspace_snapshot(text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.workspace_snapshot(text) TO anon,authenticated;
+CREATE FUNCTION public.workspace_record(p_token text,p_event_id uuid,p_kind text) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN IF p_token !~ '^[a-f0-9]{64}$' OR p_kind NOT IN ('prompt','email','meeting','tasks','research','conversation') THEN RAISE EXCEPTION 'Invalid activity'; END IF; INSERT INTO public.workspace_activity(owner_hash,event_id,kind) VALUES(encode(sha256(convert_to(p_token,'UTF8')),'hex'),p_event_id,p_kind) ON CONFLICT DO NOTHING; END $$;
+REVOKE ALL ON FUNCTION public.workspace_record(text,uuid,text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.workspace_record(text,uuid,text) TO anon,authenticated;
+CREATE FUNCTION public.workspace_submit_feedback(p_token text,p_rating integer,p_minutes integer,p_note text) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN IF p_token !~ '^[a-f0-9]{64}$' THEN RAISE EXCEPTION 'Invalid workspace token'; END IF; INSERT INTO public.workspace_feedback(owner_hash,rating,minutes_saved,note) VALUES(encode(sha256(convert_to(p_token,'UTF8')),'hex'),p_rating,p_minutes,p_note) ON CONFLICT(owner_hash) DO UPDATE SET rating=excluded.rating,minutes_saved=excluded.minutes_saved,note=excluded.note,updated_at=now(); END $$;
+REVOKE ALL ON FUNCTION public.workspace_submit_feedback(text,integer,integer,text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.workspace_submit_feedback(text,integer,integer,text) TO anon,authenticated;

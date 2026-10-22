@@ -14,13 +14,70 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      workspace_activity: {
+        Row: {
+          created_at: string
+          event_id: string
+          kind: string
+          owner_hash: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          kind: string
+          owner_hash: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          kind?: string
+          owner_hash?: string
+        }
+        Relationships: []
+      }
+      workspace_feedback: {
+        Row: {
+          minutes_saved: number
+          note: string
+          owner_hash: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          minutes_saved: number
+          note?: string
+          owner_hash: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          minutes_saved?: number
+          note?: string
+          owner_hash?: string
+          rating?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      workspace_record: {
+        Args: { p_event_id: string; p_kind: string; p_token: string }
+        Returns: undefined
+      }
+      workspace_snapshot: { Args: { p_token: string }; Returns: Json }
+      workspace_submit_feedback: {
+        Args: {
+          p_minutes: number
+          p_note: string
+          p_rating: number
+          p_token: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

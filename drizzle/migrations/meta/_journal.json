@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792654455780,
+      "tag": "0000_workspace_activity_and_feedback",
+      "breakpoints": true
+    }
+  ]
 }
