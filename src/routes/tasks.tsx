@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ListChecks } from "lucide-react";
 import { ToolPage } from "@/components/app/ToolPage";
 
-const t = "AI Task Planner — Atlas Workplace AI";
+const t = "AI Task Planner — Atlas Workspace";
 const d = "Prioritize your to-dos and get a realistic, time-blocked schedule.";
 export const Route = createFileRoute("/tasks")({
   head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),

@@ -12,13 +12,14 @@ import { Disclaimer } from "@/components/app/Disclaimer";
 import { ChatError } from "@/components/app/ChatError";
 import { createThread, deleteThread, ensureThread, loadThreads, updateThreadMessages, useThreads } from "@/lib/threads";
 import { cn } from "@/lib/utils";
+import { useWorkspaceStats } from '@/components/app/WorkspaceStatsProvider';
 
 export const Route = createFileRoute("/chat/$threadId")({
   head: () => ({
     meta: [
-      { title: "AI Chat — Atlas Workplace AI" },
+      { title: "AI Chat — Atlas Workspace" },
       { name: "description", content: "Chat with Atlas, your AI workplace assistant." },
-      { property: "og:title", content: "AI Chat — Atlas Workplace AI" },
+      { property: "og:title", content: "AI Chat — Atlas Workspace" },
       { property: "og:description", content: "Chat with Atlas, your AI workplace assistant." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -72,6 +73,8 @@ const STARTERS = ["Help me write a polite follow-up to a client", "How do I prio
 function ChatWindow({ threadId, onNew }: { threadId: string; onNew: () => void }) {
   const [initial] = useState(() => loadThreads().find((t) => t.id === threadId)?.messages ?? []);
   const [input, setInput] = useState("");
+  const { record } = useWorkspaceStats();
+  const conversationStarted = useRef(initial.some(message => message.role === 'user'));
   const ta = useRef<HTMLTextAreaElement>(null);
   const bottom = useRef<HTMLDivElement>(null);
   const transport = useMemo(() => new DefaultChatTransport({ api: "/api/chat", body: { threadId } }), [threadId]);
@@ -92,6 +95,8 @@ function ChatWindow({ threadId, onNew }: { threadId: string; onNew: () => void }
 
   function send(text: string) {
     if (!text.trim() || busy) return;
+    record('prompt');
+    if (!conversationStarted.current) { record('conversation'); conversationStarted.current = true; }
     sendMessage({ text });
     setInput("");
   }

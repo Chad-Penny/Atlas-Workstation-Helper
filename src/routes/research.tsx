@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { ToolPage } from "@/components/app/ToolPage";
 
-const t = "AI Research Assistant — Atlas Workplace AI";
+const t = "AI Research Assistant — Atlas Workspace";
 const d = "Get structured research briefings with findings, trade-offs and next steps.";
 export const Route = createFileRoute("/research")({
   head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),

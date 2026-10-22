@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TOOL_PROMPTS, type ToolId } from "@/lib/prompts";
 import { Disclaimer } from "./Disclaimer";
+import { useWorkspaceStats } from './WorkspaceStatsProvider';
+import { completedGeneration } from '@/lib/workspace-stats';
 
 export type Field =
   | { name: string; label: string; type: "text"; placeholder?: string }
@@ -28,12 +30,15 @@ export function ToolPage({
   const [mode, setMode] = useState<"preview" | "edit">("preview");
   const [showPrompt, setShowPrompt] = useState(false);
   const abort = useRef<AbortController | null>(null);
+  const { record } = useWorkspaceStats();
 
   async function run() {
     if (!values[required]?.trim()) { toast.error("Please fill in the required field first."); return; }
     const ctrl = new AbortController();
     abort.current = ctrl;
     setBusy(true); setOutput(""); setMode("preview");
+    record('prompt');
+    let generated = '';
     try {
       const res = await fetch("/api/generate", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -48,8 +53,12 @@ export function ToolPage({
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
-        setOutput((o) => o + dec.decode(value, { stream: true }));
+        generated += dec.decode(value, { stream: true });
+        setOutput(generated);
       }
+      generated += dec.decode();
+      setOutput(generated);
+      for (const kind of completedGeneration(tool, generated, !ctrl.signal.aborted)) record(kind);
     } catch (e) {
       if ((e as Error).name !== "AbortError") toast.error((e as Error).message);
     } finally {

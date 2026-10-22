@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Mail } from "lucide-react";
 import { ToolPage } from "@/components/app/ToolPage";
 
-const t = "Smart Email Generator — Atlas Workplace AI";
+const t = "Smart Email Generator — Atlas Workspace";
 const d = "Draft polished professional emails in seconds with the right tone.";
 export const Route = createFileRoute("/email")({
   head: () => ({ meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),

@@ -6,9 +6,9 @@ import { ChatError } from "@/components/app/ChatError";
 export const Route = createFileRoute("/chat/")({
   head: () => ({
     meta: [
-      { title: "Open Conversations — Atlas Workplace AI" },
+      { title: "Open Conversations — Atlas Workspace" },
       { name: "description", content: "Open your latest Atlas workplace conversation or start a new chat." },
-      { property: "og:title", content: "Open Conversations — Atlas Workplace AI" },
+      { property: "og:title", content: "Open Conversations — Atlas Workspace" },
       { property: "og:description", content: "Open your latest Atlas workplace conversation or start a new chat." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
