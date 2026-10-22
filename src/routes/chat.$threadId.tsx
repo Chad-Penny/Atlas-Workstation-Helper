@@ -17,9 +17,9 @@ import { useWorkspaceStats } from '@/components/app/WorkspaceStatsProvider';
 export const Route = createFileRoute("/chat/$threadId")({
   head: () => ({
     meta: [
-      { title: "AI Chat — Atlas Workplace AI" },
+      { title: "AI Chat — Atlas Workspace" },
       { name: "description", content: "Chat with Atlas, your AI workplace assistant." },
-      { property: "og:title", content: "AI Chat — Atlas Workplace AI" },
+      { property: "og:title", content: "AI Chat — Atlas Workspace" },
       { property: "og:description", content: "Chat with Atlas, your AI workplace assistant." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
