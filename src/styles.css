@@ -185,7 +185,6 @@
 .workspace-hero-image { position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover; object-position: center; }
 .workspace-hero-copy { position: relative; width: 64%; padding: 36px; color: var(--hero-foreground); }
 .workspace-hero-copy p { color: inherit; }
-.tool-number { font-variant-numeric: tabular-nums; }
 @media (max-width: 640px) {
  .workspace-hero { min-height: 365px; }
  .workspace-hero-image { object-position: left; opacity: .28; }

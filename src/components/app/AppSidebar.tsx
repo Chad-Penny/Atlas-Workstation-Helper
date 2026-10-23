@@ -23,7 +23,7 @@ export function AppSidebar() {
     <SidebarHeader className="border-b border-sidebar-border pb-5 pt-6">
       <Link to="/" className="flex items-center gap-3 px-2">
         <div className="grid size-8 shrink-0 place-items-center rounded-md border border-sidebar-primary/40 text-sidebar-primary"><Compass className="size-5" /></div>
-        <div className="group-data-[collapsible=icon]:hidden"><p className="font-display text-xl font-semibold text-sidebar-accent-foreground">Atlas<span className="text-sidebar-primary">.</span></p><p className="text-[10px] uppercase text-sidebar-foreground">Workspace</p></div>
+        <div className="group-data-[collapsible=icon]:hidden"><p className="font-display text-xl font-semibold text-sidebar-accent-foreground">Atlas</p><p className="text-[10px] uppercase text-sidebar-foreground">Workspace</p></div>
       </Link>
     </SidebarHeader>
     <SidebarContent>
