@@ -30,8 +30,8 @@ export function AppSidebar() {
       <SidebarGroup className="pt-6">
         <SidebarGroupLabel className="mb-2 text-[10px] uppercase text-sidebar-foreground/60">Your command center</SidebarGroupLabel>
         <SidebarGroupContent><SidebarMenu className="gap-1.5">
-          {NAV.map((item, index) => <SidebarMenuItem key={item.url}><SidebarMenuButton asChild isActive={active(item.url)} tooltip={item.title} className="h-11 rounded-md data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-primary">
-            <Link to={item.url} onClick={() => { if (isMobile) setOpenMobile(false); }}><item.icon className="size-4" /><span className="flex-1">{item.title}</span><span className="tool-number text-[10px] text-sidebar-foreground/40 group-data-[collapsible=icon]:hidden">0{index + 1}</span></Link>
+          {NAV.map((item) => <SidebarMenuItem key={item.url}><SidebarMenuButton asChild isActive={active(item.url)} tooltip={item.title} className="h-11 rounded-md data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-primary">
+            <Link to={item.url} onClick={() => { if (isMobile) setOpenMobile(false); }}><item.icon className="size-4" /><span className="flex-1">{item.title}</span></Link>
           </SidebarMenuButton></SidebarMenuItem>)}
         </SidebarMenu></SidebarGroupContent>
       </SidebarGroup>
