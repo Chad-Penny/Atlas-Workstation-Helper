@@ -2,6 +2,6 @@
 - [x] Check all feature pages on desktop, tablet, and mobile; fix layout failures.
 - [x] Run regression tests and verify chat end-to-end.
 - [x] Add welcoming branding, shadows, light/dark switching and phone swipes (user confirmed swipes work).
-- [ ] Redesign dashboard and navigation as Atlas Workspace in Solar Amber & Titanium.
-- [ ] Add optional five-star survey and compact, accurately tracked usage statistics.
-- [ ] Verify feedback, tracked activity, navigation and appearance across screen sizes; skip swipe testing.
+- [x] Redesign dashboard and navigation as Atlas Workspace in Solar Amber & Titanium.
+- [x] Add optional five-star survey and compact, accurately tracked usage statistics.
+- [x] Verify feedback, tracked activity, navigation and appearance across screen sizes; skip swipe testing.
